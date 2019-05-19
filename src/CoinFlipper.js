@@ -3,17 +3,28 @@ import Coin from './Coin'
 
 class CoinFlipper extends Component {
 
-  constructor(props) {
+    static defaultProps = {
+      coins: [
+        {side: 'heads', imgSrc:'https://tinyurl.com/react-coin-heads-jpg'},
+        {side: 'tails', imgSrc:'http://www.pcgscoinfacts.com/UserImages/71009269r.jpg'}
+      ]
+    }
+    constructor(props) {
     super(props);
     this.state = {
-      heads: true
-    };
+      currCoin: null,
+      nFlips: 0,
+      nHeads: 0,
+      nTails: 0,
+    }
   }
 
-  flip = () => {
+  flipCoin = () => {
     this.setState({
-      heads: !this.state.heads
+      nFlips: this.state.nFlips+1
     })
+    const newCoin = this.props.coins[Math.floor(Math.random() * this.props.coins.length)]
+    newCoin.side === 'heads' ? this.setState({nHeads: this.state.nHeads + 1}) : this.setState({nTails: this.state.nTails + 1})
   }
 
   render() {
@@ -21,7 +32,8 @@ class CoinFlipper extends Component {
       <div className="CoinFlipper">
         <h1>Heads or Tails?</h1>
         <Coin heads={this.state.heads}/>
-        <button onClick={this.flip}>Flip</button>
+        <button onClick={this.flipCoin}>Flip</button>
+        <h4>Out of {this.state.nFlips} flips, there have been {this.state.nHeads} heads and {this.state.nTails} tails.</h4>
       </div>
     );
   }
